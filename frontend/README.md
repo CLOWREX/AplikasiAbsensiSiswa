@@ -8,7 +8,7 @@ Aplikasi absensi siswa berbasis **QR Code** dengan dukungan:
 
 ## 🚀 Fitur Aplikasi
 
-### 🔹 1. Fitur Dasar
+### 🔹 Fitur
 
 ✅ **Guru/Admin**
 - Generate QR Code harian untuk absensi.  
@@ -27,31 +27,14 @@ Aplikasi absensi siswa berbasis **QR Code** dengan dukungan:
 
 ---
 
-### 🔹 2. Fitur Lanjutan
-
-✅ **Guru/Admin**
-- Export laporan ke Excel/CSV.  
-- Filter absensi per kelas, tanggal, atau siswa.  
-
-✅ **Siswa**
-- Riwayat absensi pribadi.  
-- Notifikasi keterlambatan/ketidakhadiran.  
-
-✅ **Sistem**
-- Role-based access (guru, siswa, admin).  
-- API terproteksi dengan validasi berlapis.  
-
----
-
 ## 🌐 Fitur Guru/Admin
 
 1. **Login & Autentikasi** → akses sesuai role.  
 2. **Generate QR Code** → QR unik dengan expired time.  
 3. **Dashboard Absensi** → daftar hadir/izin/sakit/alpa + filter kelas.  
 4. **Manajemen Data** → CRUD siswa, guru, kelas, jadwal.  
-5. **Export Laporan** → Excel/PDF.  
-6. **Notifikasi Otomatis** → WA/email ke siswa/orangtua.  
-7. **Log Aktivitas** → catat login, generate QR, export laporan.  
+5. **Notifikasi Otomatis** → WA/email ke siswa/orangtua.  
+6. **Log Aktivitas** → catat login, generate QR, export laporan.  
 
 ---
 
@@ -60,5 +43,5 @@ Aplikasi absensi siswa berbasis **QR Code** dengan dukungan:
 1. **Login & Autentikasi** → username dan password.  
 2. **Scan QR Code** → via kamera HP atau webcam laptop.  
 3. **Status Kehadiran** → hasil absensi langsung muncul.  
-4. **Riwayat Absensi** → histori absensi semesteran.  
+4. **Riwayat Absensi** → histori absensi.  
 5. **Notifikasi** → popup/web push/mobile push untuk keterlambatan/ketidakhadiran.  
