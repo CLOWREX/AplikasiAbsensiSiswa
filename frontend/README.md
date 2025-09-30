@@ -18,7 +18,7 @@ Dilengkapi fitur notifikasi otomatis (WhatsApp/Email) serta laporan absensi yang
 - Laporan absensi sederhana (JSON/tabel di web).  
 
 ✅ **Siswa**
-- Login menggunakan nama lengkap dan NIS.  
+- Login menggunakan username dan password.  
 - Scan QR Code untuk absensi (via kamera HP/webcam).  
 - Mendapatkan status absensi berhasil/gagal.  
 - Melihat status absensi hari ini (Hadir, Terlambat, Izin, Sakit, Alpa).  
