@@ -1,10 +1,8 @@
 # 📌 Aplikasi Absensi Siswa Berbasis QR Code
 
-Aplikasi absensi siswa modern berbasis **QR Code** dengan dukungan:  
-- **Guru/Admin (Web App)** → kelola absensi & laporan  
+Aplikasi absensi siswa berbasis **QR Code** dengan dukungan:  
+- **Guru/Admin (Web/Mobile)** → kelola absensi & laporan  
 - **Siswa (Web/Mobile)** → absensi lewat scan QR & lihat riwayat  
-
-Dilengkapi fitur notifikasi otomatis (WhatsApp/Email) serta laporan absensi yang bisa diexport ke Excel/PDF.  
 
 ---
 
@@ -59,7 +57,7 @@ Dilengkapi fitur notifikasi otomatis (WhatsApp/Email) serta laporan absensi yang
 
 ## 👨‍🎓 Fitur Siswa (Web & Mobile)
 
-1. **Login & Autentikasi** → NIS/NISN atau akun sekolah.  
+1. **Login & Autentikasi** → username dan password.  
 2. **Scan QR Code** → via kamera HP atau webcam laptop.  
 3. **Status Kehadiran** → hasil absensi langsung muncul.  
 4. **Riwayat Absensi** → histori absensi semesteran.  
