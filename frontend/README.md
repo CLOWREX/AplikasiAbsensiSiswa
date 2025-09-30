@@ -45,24 +45,6 @@ Dilengkapi fitur notifikasi otomatis (WhatsApp/Email) serta laporan absensi yang
 
 ---
 
-### 🔹 3. Fitur Advanced
-
-✨ **Integrasi Lanjutan**
-- Integrasi dengan sistem akademik/sekolah (nilai, jadwal, dll).  
-- QR Code bisa diganti jadi NFC/RFID jika ada perangkat.  
-
-✨ **Frontend Modern**
-- Dashboard guru dengan grafik interaktif (Chart.js / Recharts).  
-- Dark mode / light mode.  
-- Mobile responsive (web bisa diakses dari HP).  
-
-✨ **Keamanan**
-- Semua secret key disimpan di `.env` (tidak di-push ke GitHub).  
-- Hashing password (bcrypt).  
-- Rate limiting API untuk cegah brute force.  
-
----
-
 ## 🌐 Fitur Guru/Admin
 
 1. **Login & Autentikasi** → akses sesuai role.  
