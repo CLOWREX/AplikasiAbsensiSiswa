@@ -17,11 +17,9 @@ export default function QRScanner({ siswaUsername }) {
           { fps: 10, qrbox: 250 },
           (decodedText) => {
             setMsg("QR detected");
-            // parse payload
             try {
               const data = JSON.parse(decodedText);
               const list = loadAbsensi();
-              // find siswa id by username (dummy mapping: username = name lower)
               const s = STUDENTS.find(s => s.nama.toLowerCase() === (siswaUsername || "").toLowerCase()) || STUDENTS[0];
               const status = "Hadir";
               const entry = { id: Date.now(), siswa_id: s.id, nama: s.nama, kelas: data.kelas || s.kelas, waktu: new Date().toISOString(), status, token: data.token };
@@ -34,7 +32,6 @@ export default function QRScanner({ siswaUsername }) {
             scanner.stop().catch(()=>{});
           },
           (error) => {
-            // ignore scanning errors
           }
         );
       } catch (e) {

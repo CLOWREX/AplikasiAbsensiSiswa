@@ -10,9 +10,7 @@ export default function Login(){
 
   const submit = (e) => {
     e.preventDefault();
-    // NOTE: siswa accounts are pre-created by teacher; here we accept any username for siswa
     if(role === "guru"){
-      // require password check? for demo accept any
       login("guru", username || "guru");
       nav("/dashboard-guru");
     } else {

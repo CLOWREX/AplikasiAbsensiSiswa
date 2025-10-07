@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime": "^7.28.4",
+    "html5-qrcode": "^2.3.8",
+    "qrcode": "^1.5.4",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-qr-code": "^2.0.18",
+    "react-router-dom": "^7.9.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
