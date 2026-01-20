@@ -1,84 +1,105 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import './login.css'; 
+import "./login.css";
+import awal from "../assets/awal.png"; 
 
-export default function Login() {
+export default function LoginPage() {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState(""); 
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const nav = useNavigate();
 
-  const submit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    
-    let role;
-    if (username.toLowerCase().includes("guru") || username.toLowerCase() === "admin") {
-        role = "guru";
-    } else {
-        role = "siswa";
-    }
-
-    if (role === "guru") {
-      login("guru", username); 
+    if (username.toLowerCase().includes("guru")) {
+      login("guru", username);
       nav("/dashboard-guru");
     } else {
-      login("siswa", username); 
+      login("siswa", username);
       nav("/home");
     }
   };
 
   return (
-    <div className="login-page"> 
-      
-      <div className="login-sidebar"> 
+    <div className="login-viewport">
+      <div className="login-container">
         
-        <img 
-          src="/learnify.png" 
-          alt="Learnify Logo" 
-          className="login-logo"
-        />
-        
-        <h1 className="logo-text">Learnify</h1> 
-      </div>
-      
-      <div className="login-content">
-        <div className="login-box card">
-          <p className="welcome-text">Welcome to Learnify</p>
-          <h2>Log into your Account</h2>
-          <form onSubmit={submit}>
-            
-            <div className="form-group">
-              <label htmlFor="username-input" className="small">Username</label>
-              <input 
-                id="username-input"
-                type="text" 
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
-                required 
-                placeholder="Masukkan Username Anda" 
-              />
+        {/* PANEL KIRI: Branding & Modern Illustration */}
+        <div className="left-brand-panel">
+          <div className="blob blob-1"></div>
+          <div className="blob blob-2"></div>
+          <div className="content-wrapper">
+            <div className="illustration-container">
+              <img src={awal} alt="QRLog Illustration" className="brand-img" />
+              <div className="floating-card stat-card">
+                <span className="card-icon">✅</span>
+                <div className="card-info">
+                  <span>Sistem Aktif</span>
+                  <p>Presensi Real-time</p>
+                </div>
+              </div>
             </div>
-            
-            <div className="form-group">
-              <label htmlFor="password-input" className="small">Password</label>
-              <input 
-                id="password-input"
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
-                placeholder="Masukkan Password Anda" 
-              />
+            <div className="brand-text">
+              <h2 className="highlight">QRLog</h2>
+              <p>Manajemen kehadiran digital dengan enkripsi QR-Code yang aman dan instan.</p>
             </div>
-            
-            <button className="primary login-btn" type="submit">Log In</button>
-          </form>
+          </div>
         </div>
 
-        <div className="version-info-footer">
-            © 2025 Learnify
+        {/* PANEL KANAN: Clean & Elegant Login Form */}
+        <div className="right-form-panel">
+          <div className="form-wrapper">
+            <header className="form-header">
+              <span className="welcome-badge">Presensi Digital v2.0</span>
+              <h1>Selamat Datang</h1>
+              <p>Kelola dan pantau kehadiranmu dengan mudah di platform <strong>QRLog</strong></p>
+            </header>
+
+            <form onSubmit={handleSubmit} className="auth-form">
+              <div className="input-group">
+                <label>USERNAME</label>
+                <div className="input-box">
+                  <input
+                    type="text"
+                    placeholder="Masukkan username Anda"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="input-group">
+                <label>PASSWORD</label>
+                <div className="input-box">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Masukkan kata sandi"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button 
+                    type="button" 
+                    className="toggle-pass" 
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "Sembunyikan" : "Lihat"}
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" className="btn-submit">Masuk ke Dashboard</button>
+              
+              <footer className="form-footer">
+                <p>&copy; 2026 QRLog Team. All rights reserved.</p>
+              </footer>
+            </form>
+          </div>
         </div>
+
       </div>
     </div>
   );

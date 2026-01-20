@@ -8,6 +8,7 @@ import ScanSiswa from "./pages/ScanSiswa";
 import RiwayatSiswa from "./pages/RiwayatSiswa";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./context/AuthContext";
+import "./index.css"
 
 export default function App() {
   const { user } = useAuth();
