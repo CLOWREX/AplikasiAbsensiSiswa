@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #0077ff;
+  --primary-hover: #005ecb;
+  --bg-soft: #f8fafc;
+  --text-main: #1e293b;
+  --text-label: #64748b;
+  --border-color: #e2e8f0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.login-viewport {
+  height: 100vh;
+  background-color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.login-container {
+  display: flex;
+  width: 100%;
+  max-width: 1050px;
+  height: 680px;
+  background: white;
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.15);
+}
+
+/* --- SISI KIRI --- */
+.left-brand-panel {
+  flex: 1.1;
+  background: var(--primary);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+}
+.blob-1 { width: 300px; height: 300px; background: rgba(255, 255, 255, 0.15); top: -80px; left: -80px; }
+.blob-2 { width: 350px; height: 350px; background: rgba(0, 163, 255, 0.5); bottom: -100px; right: -50px; }
+
+.content-wrapper { position: relative; z-index: 5; padding: 40px; text-align: center; }
+
+.illustration-container { position: relative; margin-bottom: 40px; }
+.brand-img {
+  width: 320px;
+  animation: floatEffect 6s ease-in-out infinite;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.2));
+}
+
+@keyframes floatEffect {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.floating-card {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 18px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  top: 20px;
+  right: -10px;
+  backdrop-filter: blur(8px);
+}
+
+.card-info span { font-weight: 800; font-size: 12px; color: #1e293b; display: block; text-align: left; }
+.card-info p { font-size: 10px; color: #64748b; margin: 0; }
+
+.brand-text h2 { color: white; font-size: 42px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 12px; }
+.brand-text .highlight { color: #80cfff; }
+.brand-text p { color: rgba(255,255,255,0.85); font-size: 15px; line-height: 1.6; max-width: 340px; }
+
+/* --- SISI KANAN --- */
+.right-form-panel {
+  flex: 1;
+  padding: 60px;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.form-wrapper { width: 100%; max-width: 380px; margin: 0 auto; }
+
+.welcome-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  background: #f0f7ff;
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 50px;
+  letter-spacing: 0.5px;
+  margin-bottom: 15px;
+}
+
+.form-header h1 {
+  font-size: 34px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+
+.form-header p {
+  font-size: 15px;
+  color: var(--text-label);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.input-group { margin-bottom: 25px; }
+
+.input-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #475569;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 15px;
+  font-family: inherit;
+  background: var(--bg-soft);
+  border: 2px solid #f1f5f9;
+  border-radius: 14px;
+  transition: all 0.25s ease;
+  color: var(--text-main);
+}
+
+.input-box input:focus {
+  outline: none;
+  background: white;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 5px rgba(0, 119, 255, 0.1);
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 18px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  background: var(--primary-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0, 119, 255, 0.25);
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 35px;
+  font-size: 12px;
+  color: #94a3b8;
+}
