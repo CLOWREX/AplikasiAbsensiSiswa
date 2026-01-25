@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { FiMenu, FiGrid } from 'react-icons/fi';
 
-const Hero = ({ name, onMenuOpen }) => (
+const Hero = ({ name, onMenuOpen }) => {
+  const navigate = useNavigate();
+
+  return (
   <section className="pt-8 md:pt-12 mb-8">
     <div className="flex items-start justify-between gap-4">
       <div className="flex flex-col">
@@ -21,7 +24,7 @@ const Hero = ({ name, onMenuOpen }) => (
         </p>
       </div>
 
-      <button className="group flex flex-col items-center gap-2 shrink-0">
+      <button onClick={() => navigate('/scan')} className="group flex flex-col items-center gap-2 shrink-0"> 
         <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#5dbcd2] rounded-[1.5rem] flex items-center justify-center text-white shadow-lg active:scale-90 transition-all">
           <img src="/src/assets/qr-scan.png" className="w-1/2 h-1/2 brightness-0 invert" alt="Scan" />
         </div>
@@ -29,7 +32,8 @@ const Hero = ({ name, onMenuOpen }) => (
       </button>
     </div>
   </section>
-);
+  );
+};
 
 const WelcomeBanner = () => (
   <div className="bg-white/80 rounded-[2.5rem] p-6 sm:p-10 shadow-lg flex flex-col sm:flex-row gap-6 items-center justify-between border mb-12 border-white/60">

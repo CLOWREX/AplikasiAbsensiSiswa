@@ -13,7 +13,7 @@ import RegisterTeacher from "./pages/Teacher/RegisterTeacher";
 import DataTeacher from "./pages/Teacher/DataTeacher";
 import ProfileTeacher from "./pages/Teacher/ProfileTeacher";
 import NotificationTeacher from "./pages/Teacher/NotificationTeacher";
-import ScanSiswa from "./pages/ScanSiswa";
+import ScanStudent from "./pages/Student/ScanStudent";
 import RiwayatSiswa from "./pages/RiwayatSiswa";
 import PresencePage from "./pages/Student/PresenceStudent";
 import NotFound from "./pages/NotFound";
@@ -126,7 +126,7 @@ export default function App() {
         element={
           <RequireAuth roles={["student", "siswa"]}>
             <StudentLayout>
-              <ScanSiswa onMenuOpen={() => setIsSidebarOpen(true)} />
+              <ScanStudent onMenuOpen={() => setIsSidebarOpen(true)} />
             </StudentLayout>
           </RequireAuth>
         }
