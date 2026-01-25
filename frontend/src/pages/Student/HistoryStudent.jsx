@@ -12,7 +12,6 @@ const HistoryStudent = () => {
     setAttendanceHistory(savedData);
   }, []);
 
-  // Perhitungan summary menggunakan .startsWith atau .includes agar status bermotif tetap terhitung
   const summary = {
     present: attendanceHistory.filter(item => item.status.startsWith('Present')).length,
     sick: attendanceHistory.filter(item => item.status.startsWith('Sick')).length,
@@ -55,7 +54,6 @@ const HistoryStudent = () => {
             <div className="space-y-4">
               {filteredData.length > 0 ? (
                 filteredData.map((item, index) => {
-                  // LOGIKA PEMISAH STATUS DAN REASON
                   const parts = item.status.split(" - ");
                   const mainStatus = parts[0];
                   const reason = parts[1];
@@ -71,7 +69,6 @@ const HistoryStudent = () => {
                         <div className="flex flex-col">
                           <span className="text-2xl font-black text-gray-700 leading-none mb-1">{mainStatus}</span>
                           
-                          {/* TULISAN REASON KECIL & MIRING */}
                           {reason && (
                             <p className="text-sm font-medium text-gray-500 italic leading-snug">
                               {reason}

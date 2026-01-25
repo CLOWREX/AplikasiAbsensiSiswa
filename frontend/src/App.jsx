@@ -9,6 +9,7 @@ import ProfileStudent from "./pages/Student/ProfileStudent";
 import NotifStudent from "./pages/Student/NotificationStudent";
 import HomeTeacher from "./pages/Teacher/HomeTeacher";
 import PresenceTeacher from "./pages/Teacher/PresenceTeacher";
+import ClassDetails from "./pages/Teacher/DetailClass";
 import RegisterTeacher from "./pages/Teacher/RegisterTeacher";
 import DataTeacher from "./pages/Teacher/DataTeacher";
 import ProfileTeacher from "./pages/Teacher/ProfileTeacher";
@@ -149,6 +150,16 @@ export default function App() {
           <RequireAuth roles={["teacher", "guru"]}>
             <TeacherLayout>
               <PresenceTeacher onMenuOpen={() => setIsSidebarOpen(true)} />
+            </TeacherLayout>
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/class_details/:className"
+        element={
+          <RequireAuth roles={["teacher", "guru"]}>
+            <TeacherLayout>
+              <ClassDetails onMenuOpen={() => setIsSidebarOpen(true)} />
             </TeacherLayout>
           </RequireAuth>
         }

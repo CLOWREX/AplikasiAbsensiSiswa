@@ -21,14 +21,40 @@ const Login = () => {
       return;
     }
 
-    if (username === "siswa" && password === "123") {
-      login({ role: "siswa", username }); 
-      navigate("/home");
+    // 1. Ambil data users dari localStorage
+    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+
+    // 2. Cari user yang cocok (username & password)
+    const foundUser = existingUsers.find(
+      (u) => u.username === username && u.password === password
+    );
+
+    // 3. Logika Pengecekan Akun
+    if (foundUser) {
+      // Login dengan data dari database (hasil register)
+      login({ 
+        role: foundUser.role, 
+        username: foundUser.username, 
+        fullName: foundUser.fullName 
+      });
+
+      // Arahkan berdasarkan role
+      if (foundUser.role === "guru") {
+        navigate("/home_teacher");
+      } else {
+        navigate("/home");
+      }
     } 
+    // 4. Fallback: Tetap izinkan login manual guru untuk testing
     else if (username === "guru" && password === "123") {
       login({ role: "guru", username });
       navigate("/home_teacher");
-    } 
+    }
+    // 5. Fallback: Siswa default (optional)
+    else if (username === "siswa" && password === "123") {
+      login({ role: "siswa", username });
+      navigate("/home");
+    }
     else {
       setError("Username or password incorrect!");
     }
@@ -43,7 +69,7 @@ const Login = () => {
       <div className="login-container">
         
         <div className="login-left">
-          <h1 className="brand-title" style={{ fontSize: '60px', color: 'white', lineHeight: '0.8', marginBottom: '15px',fontFamily: 'Agbalumo' }}>
+          <h1 className="brand-title" style={{ fontSize: '60px', color: 'white', lineHeight: '0.8', marginBottom: '15px', fontFamily: 'Agbalumo' }}>
             QRLog
           </h1>
 
@@ -77,10 +103,10 @@ const Login = () => {
 
           <form onSubmit={handleLogin}>
             <div className="form-group">
-              <label>NIS or NIP</label>
+              <label>Username or NIS</label>
               <input
                 type="text"
-                placeholder="Enter your NIS or NIP"
+                placeholder="Enter your Username or NIS"
                 value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);

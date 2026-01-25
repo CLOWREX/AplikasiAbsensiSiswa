@@ -91,7 +91,7 @@ const Home = ({ onMenuOpen }) => {
     },
     { 
       title: "Schedule", 
-      description: "Check your daily and weekly timetable.", 
+      description: "Check your daily timetable to stay on track.", 
       buttonText: "Check Schedule", 
       path: "/schedule",
       image: "https://cdn-icons-png.flaticon.com/512/1048/1048953.png" 
