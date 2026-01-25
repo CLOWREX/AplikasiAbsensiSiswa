@@ -1,4 +1,16 @@
-__pycache__/ 
-*.pyc 
-*.db 
-build/ 
+# Python
+__pycache__/
+*.pyc
+*.db
+
+# Virtual env & secrets
+venv/
+.env
+
+# Build
+build/
+dist/
+
+# OS
+Thumbs.db
+.DS_Store
