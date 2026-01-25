@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+body, input, textarea, button {
+  font-family: 'Afacad', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.qr-log {
+  font-family: 'Agbalumo', serif;
+}
+
+.btn-login {
+  font-family: 'Amaranth', sans-serif;
+  font-weight: 700;
+}
