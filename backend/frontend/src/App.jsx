@@ -22,7 +22,7 @@ export default function App() {
         element={user ? <Home /> : <Navigate to="/login" replace />}
       />
       <Route
-        path="/dashboard-guru"
+        path="/home_teacher"
         element={
           user?.role === "guru" ? <DashboardGuru /> : <Navigate to="/login" />
         }

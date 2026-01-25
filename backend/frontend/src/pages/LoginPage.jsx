@@ -21,7 +21,7 @@ export default function Login() {
 
     if (role === "guru") {
       login("guru", username); 
-      nav("/dashboard-guru");
+      nav("/home_teacher");
     } else {
       login("siswa", username); 
       nav("/home");
