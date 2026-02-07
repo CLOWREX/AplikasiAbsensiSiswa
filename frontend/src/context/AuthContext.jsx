@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 const AuthContext = createContext();
 
@@ -6,35 +9,38 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    try {
-      const storedUser = JSON.parse(localStorage.getItem("app_user"));
-      if (storedUser) setUser(storedUser);
-    } catch (e) {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const checkAuth = async () => {
+      try {
+          const res = await axios.get('http://localhost:8001/auth/me', { withCredentials: true });
+          setUser(res.data);
+      } catch (err) {
+          console.warn("Auth check failed");
+      } finally {
+          setLoading(false);
+      }
+  };
 
   useEffect(() => {
-    if (user) localStorage.setItem("app_user", JSON.stringify(user));
-    else localStorage.removeItem("app_user");
-  }, [user]);
+    checkAuth();
+  }, []);
 
   const login = (userData) => {
     setUser(userData);
-    return userData;
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("app_user");
+  const logout = async () => {
+    try {
+      await axios.post("http://localhost:8001/auth/logout");
+      setUser(null);
+    } catch (err) {
+      console.error("Logout failed", err);
+      setUser(null);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {children}
+    <AuthContext.Provider value={{ user, login, logout, loading, checkAuth }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 }

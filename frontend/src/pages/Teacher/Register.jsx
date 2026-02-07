@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi"; 
-import { useAuth } from "../../context/AuthContext";
+import { FiEye, FiEyeOff } from "react-icons/fi"; 
+import axios from "axios"; 
 import "./register.css";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(""); 
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   
   const navigate = useNavigate();
-  const { user } = useAuth();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     if (!fullname || !username || !password || !phone) {
@@ -23,18 +22,31 @@ const Register = () => {
       return;
     }
 
-    console.log("Mendaftarkan:", { fullname, username, phone, password });
-    
-    alert("Registration Successful!");
-    navigate("/login"); 
+    try {
+      const response = await axios.post("http://localhost:8001/auth/register", {
+        fullName: fullname,
+        username: username, 
+        password: password,
+        phone: phone,
+        role: "teacher" 
+      });
+
+      if (response.status === 201 || response.status === 200) {
+        alert("Registration Successful! Please login.");
+        navigate("/login"); 
+      }
+    } catch (err) {
+      setError(err.response?.data?.detail || "Registration failed. Try again.");
+    }
   };
 
   return (
     <div className="register-page-wrapper">
       <div className="register-container">
-        
         <div className="register-left">
-          <h1 className="brand-title">QRLog</h1>
+          <h1 className="brand-title" style={{ fontSize: '60px', color: 'white', lineHeight: '0.8', marginBottom: '15px', fontFamily: 'Agbalumo' }}>
+            QRLog
+          </h1>
           <div className="qr-box">
             <img
               src="/src/assets/qr-scan.png" 
@@ -50,7 +62,6 @@ const Register = () => {
         </div>
 
         <div className="register-right">
-          
           <div className="form-header">
             <h2 className="welcome">Create your account</h2>
             <p className="subtitle">Join the teacher dashboard</p>
@@ -112,7 +123,7 @@ const Register = () => {
           </form>
 
           <p className="login-link">
-            Already have an account? <span onClick={() => navigate("/login")}>Login here!</span>
+            Already have an account? <span onClick={() => navigate("/login")} style={{cursor: 'pointer', color: '#1a73e8'}}>Login here!</span>
           </p>
         </div>
       </div>

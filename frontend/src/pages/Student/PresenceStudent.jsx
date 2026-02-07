@@ -1,37 +1,64 @@
 import React, { useState } from 'react';
 import { FiArrowLeft, FiSend } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
+import Swal from 'sweetalert2'; 
 
 const PresencePage = () => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const [explanation, setExplanation] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!selected || !explanation) {
-      alert("Please select a type and provide an explanation!");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Please select a type and provide an explanation!',
+        confirmButtonColor: '#5dbcd2',
+        borderRadius: '2rem'
+      });
       return;
     }
 
-    const now = new Date();
-    
-    // Format Status: "Sick - Maaf bu saya sakit"
-    const statusFormatted = `${selected} - ${explanation}`;
+    setLoading(true);
 
-    const newEntry = {
-      id: Date.now(),
-      status: statusFormatted,
-      date: now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-      time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true }),
-      type: 'danger' 
+    const attendanceData = {
+      status: selected,
+      explanation: explanation
     };
 
-    const existingHistory = JSON.parse(localStorage.getItem("attendanceHistory") || "[]");
-    localStorage.setItem("attendanceHistory", JSON.stringify([newEntry, ...existingHistory]));
+    try {
+      await axios.post("http://localhost:8001/attendance/submit", attendanceData, {
+        withCredentials: true 
+      });
 
-    navigate("/history");
+      await Swal.fire({
+        icon: 'success',
+        title: 'Submitted!',
+        text: 'Your presence has been recorded.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
+      navigate("/history");
+    } catch (err) {
+      console.error(err);
+      
+      // Notif Error
+      Swal.fire({
+        icon: 'error',
+        title: 'Failed',
+        text: err.response?.data?.detail || "Gagal mengirim absen ke database",
+        confirmButtonColor: '#5dbcd2',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,7 +88,6 @@ const PresencePage = () => {
                 <option value="" disabled>Select absence type</option>
                 <option value="Sick">Sick</option>
                 <option value="Permission">Permission</option>
-                <option value="Alpha">Alpha</option>
               </select>
             </div>
 
@@ -79,10 +105,10 @@ const PresencePage = () => {
 
             <button 
               type="submit"
-              className="h-13 w-full bg-[#5dbcd2] text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-lg active:scale-[0.98] transition"
-            >
+              disabled={loading}
+              className={`h-13 w-full bg-[#5dbcd2] text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-lg active:scale-[0.98] transition ${loading ? 'opacity-70' : ''}`}>
               <FiSend className="rotate-45" />
-              Send Presence
+              {loading ? "Sending..." : "Send Presence"}
             </button>
           </form>
         </div>

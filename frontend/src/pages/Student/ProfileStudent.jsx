@@ -1,21 +1,50 @@
 import React from 'react';
 import { FiArrowLeft, FiUser, FiHash, FiBookOpen, FiPhone, FiLock } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../../context/AuthContext"; 
 
 const ProfileStudent = () => {
   const navigate = useNavigate();
+  const { user, loading } = useAuth(); 
 
   const profileData = [
-    { label: 'Name', value: 'Ririn Suhartini', icon: <FiUser /> },
-    { label: 'NIS', value: '13121', icon: <FiHash /> },
-    { label: 'Class', value: 'XI - RPL', icon: <FiBookOpen /> },
-    { label: 'Phone', value: '0895383307167', icon: <FiPhone /> },
-    { label: 'Password', value: 'ririn123', icon: <FiLock /> },
+    { 
+      label: 'Name', 
+      value: user?.fullName || 'Not Set', 
+      icon: <FiUser /> 
+    },
+    { 
+      label: 'NIS', 
+      value: user?.username || 'Not Set', 
+      icon: <FiHash /> 
+    },
+    { 
+      label: 'Class', 
+      value: user?.student_class || 'Not Set', 
+      icon: <FiBookOpen /> 
+    },
+    { 
+      label: 'Phone', 
+      value: user?.phone || 'Not Set', 
+      icon: <FiPhone /> 
+    },
+    { 
+      label: 'Status', 
+      value: user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Student', 
+      icon: <FiLock /> 
+    },
   ];
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#eaf6fb]">
+        <p className="text-[#5dbcd2] font-black animate-pulse">Loading Profile...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 flex flex-col h-screen bg-[#eaf6fb] font-['Afacad']">
-      {/* Header */}
       <div className="bg-[#5dbcd2] p-5 flex items-center gap-4 text-white shadow-sm">
         <button 
           onClick={() => navigate("/home")} 
@@ -26,11 +55,9 @@ const ProfileStudent = () => {
       </div>
 
       <div className="p-6 md:p-10 flex-1 overflow-y-auto flex justify-center items-start">
-        {/* KOTAK PEMBUNGKUS UTAMA (Main Card) */}
         <div className="w-full max-w-2xl bg-white rounded-[3rem] shadow-xl shadow-blue-200/50 p-8 md:p-12 border border-white">
           
           <div className="flex flex-col items-center">
-            {/* Foto Profil */}
             <div className="relative mb-8">
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-[#f8fafb] border-4 border-[#5dbcd2]/20 shadow-inner overflow-hidden flex items-center justify-center">
                 <img 
@@ -41,19 +68,17 @@ const ProfileStudent = () => {
               </div>
             </div>
 
-            {/* Title */}
             <div className="text-center mb-10">
               <h2 className="text-2xl font-black text-gray-800">Student Profile</h2>
               <p className="text-[#899ca9] font-bold">Personal information details</p>
             </div>
 
-            {/* List Data Profile - Sekarang di dalam Grid agar lebih penuh */}
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
               {profileData.map((item, index) => (
                 <div 
                   key={index} 
                   className={`bg-[#f8fafb] border-2 border-gray-50 rounded-2xl p-4 flex items-center gap-4 transition-all hover:border-[#5dbcd2]/30 ${
-                    index === 0 ? "md:col-span-2" : "" // Baris pertama (Nama) buat lebar penuh
+                    index === 0 ? "md:col-span-2" : "" 
                   }`}
                 >
                   <div className="text-[#5dbcd2] text-xl">

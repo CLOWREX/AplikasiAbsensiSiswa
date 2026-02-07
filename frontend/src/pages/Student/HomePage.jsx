@@ -20,8 +20,7 @@ const HomePage = () => {
         <QRScannerModal
           onClose={() => {
             closeScanner();
-            // Navigate di parent setelah modal hilang
-            window.location.href = "/history"; // atau useNavigate di sini
+            window.location.href = "/history"; 
           }}
         />
       )}

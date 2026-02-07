@@ -14,10 +14,9 @@ import RegisterTeacher from "./pages/Teacher/RegisterTeacher";
 import DataTeacher from "./pages/Teacher/DataTeacher";
 import ProfileTeacher from "./pages/Teacher/ProfileTeacher";
 import NotificationTeacher from "./pages/Teacher/NotificationTeacher";
+import Generate from "./pages/Teacher/GenerateQRCode";
 import ScanStudent from "./pages/Student/ScanStudent";
-import RiwayatSiswa from "./pages/RiwayatSiswa";
 import PresencePage from "./pages/Student/PresenceStudent";
-import NotFound from "./pages/NotFound";
 import SidebarStudent from "./pages/Student/SidebarStudent";
 import SidebarTeacher from "./pages/Teacher/SidebarTeacher";
 import { useAuth } from "./context/AuthContext";
@@ -113,7 +112,7 @@ export default function App() {
         }
       />
       <Route
-        path="/notification"
+        path="/notifications"
         element={
           <RequireAuth roles={["student", "siswa"]}>
             <StudentLayout>
@@ -205,18 +204,15 @@ export default function App() {
         }
       />
       <Route
-        path="/riwayat"
+        path="/generate_teacher"
         element={
           <RequireAuth roles={["teacher", "guru"]}>
             <TeacherLayout>
-              <RiwayatSiswa onMenuOpen={() => setIsSidebarOpen(true)} />
+              <Generate onMenuOpen={() => setIsSidebarOpen(true)} />
             </TeacherLayout>
           </RequireAuth>
         }
       />
-
-      {/* 404 */}
-      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

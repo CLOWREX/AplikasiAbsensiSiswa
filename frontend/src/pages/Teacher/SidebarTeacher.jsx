@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from "../../context/AuthContext";
 import { FiHome, FiCheckSquare, FiUsers, FiFileText, FiUser, FiLogOut, FiBell, FiGrid, FiX } from 'react-icons/fi';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -7,6 +7,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const menuItems = [
     { name: 'Home', icon: <FiHome />, path: '/home_teacher' },
@@ -61,12 +62,47 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </nav>
 
         <div className="p-4 border-t border-gray-50">
-          <div onClick={logout} className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer font-bold text-[#899ca9] hover:bg-red-50 hover:text-red-500 transition">
+          <div 
+            onClick={() => setShowLogoutConfirm(true)} 
+            className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer font-bold text-[#899ca9] hover:bg-red-50 hover:text-red-500 transition"
+          >
             <FiLogOut className="text-xl" />
             <span>Logout</span>
           </div>
         </div>
       </aside>
+
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 w-[90%] max-w-sm shadow-xl">
+            <h2 className="text-xl font-bold text-gray-800 mb-2">
+              Confirm Logout
+            </h2>
+            <p className="text-gray-500 mb-6">
+              Are you sure you want to log out?
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="px-4 py-2 rounded-lg font-semibold text-gray-500 hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={() => {
+                  logout();
+                  navigate("/login");
+                }}
+                className="!px-[15px] !py-[4px] rounded-lg font-semibold bg-red-500 text-white hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

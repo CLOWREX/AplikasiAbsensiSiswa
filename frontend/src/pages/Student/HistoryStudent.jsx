@@ -1,29 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import { FiArrowLeft, FiSearch, FiCheckCircle, FiXCircle } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const HistoryStudent = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [attendanceHistory, setAttendanceHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const formatDateTimeUI = (dateStr, timeStr) => {
+    try {
+      if (!dateStr || !timeStr) return "";
+
+      let displayDate = dateStr;
+      if (!/[a-zA-Z]/.test(dateStr)) {
+        const dateObj = new Date(dateStr);
+        displayDate = dateObj.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        });
+      }
+
+      const [hours, minutes] = timeStr.split(':');
+      const tempDate = new Date();
+      tempDate.setHours(parseInt(hours), parseInt(minutes));
+
+      const displayTime = tempDate.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      }).toLowerCase();
+
+      return `${displayDate}, ${displayTime}`;
+    } catch (e) {
+      return `${dateStr}, ${timeStr}`;
+    }
+  };
 
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("attendanceHistory") || "[]");
-    setAttendanceHistory(savedData);
+    const fetchHistory = async () => {
+      try {
+        const res = await axios.get("http://localhost:8001/attendance/history", {
+          withCredentials: true
+        });
+        
+        const sortedData = res.data.sort((a, b) => {
+          const dateTimeA = new Date(`${a.date} ${a.time}`);
+          const dateTimeB = new Date(`${b.date} ${b.time}`);
+          return dateTimeB - dateTimeA; 
+        });
+
+        setAttendanceHistory(sortedData);
+      } catch (err) {
+        console.error("Gagal mengambil data history:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHistory();
   }, []);
 
   const summary = {
-    present: attendanceHistory.filter(item => item.status.startsWith('Present')).length,
-    sick: attendanceHistory.filter(item => item.status.startsWith('Sick')).length,
-    alpha: attendanceHistory.filter(item => item.status.startsWith('Alpha')).length,
-    permission: attendanceHistory.filter(item => item.status.startsWith('Permission')).length,
+    present: attendanceHistory.filter(item => item.status === 'Present').length,
+    sick: attendanceHistory.filter(item => item.status === 'Sick').length,
+    alpha: attendanceHistory.filter(item => item.status === 'Alpha').length,
+    permission: attendanceHistory.filter(item => item.status === 'Permission').length,
     total: attendanceHistory.length
   };
 
   const filteredData = attendanceHistory.filter((item) => {
     const keyword = search.toLowerCase().trim();
     if (!keyword) return true;
-    const combinedData = `${item.status} ${item.date} ${item.time}`.toLowerCase();
+    const combinedData = `${item.status} ${item.explanation || ''} ${item.date}`.toLowerCase();
     return combinedData.includes(keyword);
   });
 
@@ -41,82 +91,88 @@ const HistoryStudent = () => {
           
           <div className="flex-[2] space-y-6">
             <div className="relative group">
-              <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-[#5dbcd2] text-xl transition-colors group-focus-within:text-[#46a1b5]" />
+              <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-[#5dbcd2] text-xl" />
               <input 
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by status or date..." 
-                className="w-full bg-white/90 border-2 border-white rounded-full py-4 !pl-14 pr-6 outline-none focus:border-[#5dbcd2] focus:bg-white shadow-sm transition-all font-semibold text-gray-600 placeholder:text-gray-300"
+                placeholder="Search status or date..." 
+                className="w-full bg-white border-2 border-white rounded-full py-4 !pl-14 pr-6 outline-none focus:border-[#5dbcd2] shadow-sm transition-all font-semibold text-gray-600"
               />
             </div>
 
             <div className="space-y-4">
-              {filteredData.length > 0 ? (
-                filteredData.map((item, index) => {
-                  const parts = item.status.split(" - ");
-                  const mainStatus = parts[0];
-                  const reason = parts[1];
-
-                  return (
-                    <div key={index} className="bg-white/70 backdrop-blur-md border border-white rounded-[2.2rem] p-5 flex items-center justify-between shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                      <div className="flex items-center gap-5">
-                        <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-inner ${
-                          mainStatus === 'Present' ? 'bg-[#5dd26f] text-white' : 'bg-red-400 text-white'
-                        }`}>
-                          {mainStatus === 'Present' ? <FiCheckCircle size={28} /> : <FiXCircle size={28} />}
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-2xl font-black text-gray-700 leading-none mb-1">{mainStatus}</span>
-                          
-                          {reason && (
-                            <p className="text-sm font-medium text-gray-500 italic leading-snug">
-                              {reason}
-                            </p>
-                          )}
-                          
-                          <p className="text-xs font-bold text-gray-400 lg:hidden mt-1">{item.date} • {item.time}</p>
-                        </div>
+              {loading ? (
+                <div className="text-center py-10 text-[#5dbcd2] font-bold">Loading...</div>
+              ) : filteredData.length > 0 ? (
+                filteredData.map((item, index) => (
+                  <div key={index} className="bg-white/80 backdrop-blur-md rounded-[2rem] p-5 flex items-center justify-between shadow-sm border border-white hover:-translate-y-1 transition-all duration-300">
+                    <div className="flex items-center gap-5">
+                      <div className={`w-14 h-14 rounded-full flex items-center justify-center ${
+                        item.status === 'Present' ? 'bg-[#5dd26f]' : 
+                        item.status === 'Sick' ? 'bg-red-400' :
+                        item.status === 'Permission' ? 'bg-yellow-400' : 'bg-red-600'
+                      } text-white shadow-lg shadow-black/5`}>
+                        {item.status === 'Present' ? <FiCheckCircle size={28} /> : <FiXCircle size={28} />}
                       </div>
-                      <span className="hidden lg:block text-[#899ca9] font-black text-lg bg-white/50 px-5 py-2 rounded-2xl border border-white/50">
-                        {item.date}, {item.time}
+                      <div className="flex flex-col">
+                        <span className="text-2xl font-black text-gray-700 leading-none">
+                          {item.status}
+                        </span>
+                        
+                        {item.status === 'Present' && (
+                          <p className={`text-sm italic mt-1 font-bold ${
+                            (() => {
+                              const [hours, minutes] = item.time.split(':').map(Number);
+                              return (hours > 6 || (hours === 6 && minutes > 30))
+                                ? 'text-orange-500'
+                                : 'text-green-500';
+                            })()
+                          }`}>
+                            {(() => {
+                              const [hours, minutes] = item.time.split(':').map(Number);
+                              return (hours > 6 || (hours === 6 && minutes > 30))
+                                ? 'Late'
+                                : 'On time';
+                            })()}
+                          </p>
+                        )}
+
+                        {item.explanation && ['Sick', 'Permission'].includes(item.status) && (
+                          <p className="text-sm text-gray-500 italic mt-1 font-medium">
+                            {item.explanation}
+                          </p>
+                        )}
+
+                        <p className="text-[11px] font-bold text-[#899ca9] lg:hidden mt-1 tracking-wide">
+                          {formatDateTimeUI(item.date, item.time)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="hidden lg:block text-right">
+                      <span className="text-[#899ca9] font-bold text-base tracking-wide">
+                        {formatDateTimeUI(item.date, item.time)}
                       </span>
                     </div>
-                  );
-                })
+                  </div>
+                ))
               ) : (
-                <div className="text-center py-20 bg-white/30 rounded-[3rem] border-2 border-dashed border-white">
-                  <p className="text-gray-400 font-bold text-xl italic">
-                    {search ? `Oops! No match for "${search}"` : "No attendance records found."}
-                  </p>
-                </div>
+                <div className="text-center py-20 text-gray-400 font-bold">No records found.</div>
               )}
             </div>
           </div>
 
           <div className="flex-1">
             <div className="sticky top-0 space-y-6">
-              <h3 className="text-2xl font-black text-gray-800 ml-4 mb-2">Monthly Summary</h3>
+              <h3 className="text-2xl font-black text-gray-800 ml-4 mb-2">Summary</h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white rounded-[2.5rem] p-7 shadow-sm border border-white flex flex-col items-center justify-center text-center transition-transform hover:scale-105">
-                  <span className="text-[#899ca9] font-bold text-[10px] uppercase tracking-[0.2em] mb-2">Total</span>
-                  <span className="text-5xl font-black text-[#5dbcd2]">{summary.total}</span>
-                </div>
-                <div className="bg-white rounded-[2.5rem] p-7 shadow-sm border border-white flex flex-col items-center justify-center text-center transition-transform hover:scale-105">
-                  <span className="text-[#899ca9] font-bold text-[10px] uppercase tracking-[0.2em] mb-2">Present</span>
-                  <span className="text-5xl font-black text-green-400">{summary.present}</span>
-                </div>
-                <div className="bg-white rounded-[2.5rem] p-7 shadow-sm border border-white flex flex-col items-center justify-center text-center transition-transform hover:scale-105">
-                  <span className="text-[#899ca9] font-bold text-[10px] uppercase tracking-[0.2em] mb-2">Sick</span>
-                  <span className="text-5xl font-black text-red-400">{summary.sick}</span>
-                </div>
-                <div className="bg-white rounded-[2.5rem] p-7 shadow-sm border border-white flex flex-col items-center justify-center text-center transition-transform hover:scale-105">
-                  <span className="text-[#899ca9] font-bold text-[10px] uppercase tracking-[0.2em] mb-2">Permission</span>
-                  <span className="text-5xl font-black text-yellow-400">{summary.permission}</span>
-                </div>
-                <div className="bg-white rounded-[2.5rem] p-7 shadow-sm border border-white flex flex-col items-center justify-center text-center col-span-2 transition-transform hover:scale-[1.02]">
-                  <span className="text-[#899ca9] font-bold text-[10px] uppercase tracking-[0.2em] mb-2">Alpha</span>
-                  <span className="text-5xl font-black text-red-600">{summary.alpha}</span>
+                <SummaryCard label="Total" value={summary.total} color="text-[#5dbcd2]" />
+                <SummaryCard label="Present" value={summary.present} color="text-green-400" />
+                <SummaryCard label="Sick" value={summary.sick} color="text-red-400" />
+                <SummaryCard label="Permission" value={summary.permission} color="text-yellow-400" />
+                <div className="col-span-2">
+                  <SummaryCard label="Alpha" value={summary.alpha} color="text-red-600" />
                 </div>
               </div>
             </div>
@@ -126,5 +182,12 @@ const HistoryStudent = () => {
     </div>
   );
 };
+
+const SummaryCard = ({ label, value, color }) => (
+  <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-white flex flex-col items-center hover:scale-105 transition-transform duration-300">
+    <span className="text-[#899ca9] font-bold text-[10px] uppercase tracking-widest mb-1">{label}</span>
+    <span className={`text-4xl font-black ${color}`}>{value}</span>
+  </div>
+);
 
 export default HistoryStudent;

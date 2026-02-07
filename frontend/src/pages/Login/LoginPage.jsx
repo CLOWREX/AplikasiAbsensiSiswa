@@ -2,77 +2,59 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
+import axios from "axios"; 
 import "./login.css";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [idNumber, setIdNumber] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuth(); 
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!username || !password) {
+    if (!idNumber || !password) {
       setError("Please fill in all fields");
       return;
     }
 
-    // 1. Ambil data users dari localStorage
-    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    try {
+      const payload = {
+        username: idNumber,
+        password: password,
+      };
 
-    // 2. Cari user yang cocok (username & password)
-    const foundUser = existingUsers.find(
-      (u) => u.username === username && u.password === password
-    );
+      const response = await axios.post(
+        "http://localhost:8001/auth/login",
+        payload,
+        { withCredentials: true }
+      );
 
-    // 3. Logika Pengecekan Akun
-    if (foundUser) {
-      // Login dengan data dari database (hasil register)
-      login({ 
-        role: foundUser.role, 
-        username: foundUser.username, 
-        fullName: foundUser.fullName 
-      });
+      if (response.status === 200) {
+          login(response.data);
 
-      // Arahkan berdasarkan role
-      if (foundUser.role === "guru") {
-        navigate("/home_teacher");
-      } else {
-        navigate("/home");
+        if (response.data.role === "teacher") {
+          navigate("/home_teacher");
+        } else {
+          navigate("/home");
+        }
       }
-    } 
-    // 4. Fallback: Tetap izinkan login manual guru untuk testing
-    else if (username === "guru" && password === "123") {
-      login({ role: "guru", username });
-      navigate("/home_teacher");
+    } catch (err) {
+      setError(err.response?.data?.detail || "Login failed. Check your NIS/NIP or password.");
     }
-    // 5. Fallback: Siswa default (optional)
-    else if (username === "siswa" && password === "123") {
-      login({ role: "siswa", username });
-      navigate("/home");
-    }
-    else {
-      setError("Username or password incorrect!");
-    }
-  };
-
-  const handleRegister = () => {
-    navigate("/register");
   };
 
   return (
     <div className="login-page-wrapper">
       <div className="login-container">
-        
         <div className="login-left">
           <h1 className="brand-title" style={{ fontSize: '60px', color: 'white', lineHeight: '0.8', marginBottom: '15px', fontFamily: 'Agbalumo' }}>
             QRLog
           </h1>
-
           <div className="qr-box">
             <img
               src="/src/assets/qr-scan.png" 
@@ -81,11 +63,9 @@ const Login = () => {
               onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/241/241528.png" }}
             />
           </div>
-
           <h2 className="left-title">Effortless Attendance</h2>
           <p className="left-desc">
-            Quickly log presence with our seamless QR-based system designed for
-            modern classrooms.
+            Quickly log presence with our seamless QR-based system designed for modern classrooms.
           </p>
         </div>
 
@@ -103,13 +83,13 @@ const Login = () => {
 
           <form onSubmit={handleLogin}>
             <div className="form-group">
-              <label>Username or NIS</label>
+              <label>NIS or NIP</label>
               <input
                 type="text"
-                placeholder="Enter your Username or NIS"
-                value={username}
+                placeholder="Enter your NIS or NIP"
+                value={idNumber}
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  setIdNumber(e.target.value);
                   setError(""); 
                 }}
               />
@@ -143,7 +123,7 @@ const Login = () => {
 
           <p className="teacher-link">
             Teacher?{" "}
-            <span onClick={handleRegister}>
+            <span onClick={() => navigate("/register")} style={{ cursor: "pointer", color: "#1a73e8" }}>
               Click here to get started!
             </span>
           </p>
