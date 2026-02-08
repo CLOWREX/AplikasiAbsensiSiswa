@@ -12,9 +12,15 @@ os.makedirs("static/qr_codes", exist_ok=True)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+origins = [
+    "https://aplikasi-absensi-siswa-blond.vercel.app",
+    "https://aplikasi-absensi-siswa-blond.vercel.app/",
+    "http://localhost:5173",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=origins,  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
