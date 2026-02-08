@@ -14,7 +14,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = [
     "https://aplikasi-absensi-siswa-blond.vercel.app",
-    "https://aplikasi-absensi-siswa-blond.vercel.app/",
     "http://localhost:5173",
 ]
 
