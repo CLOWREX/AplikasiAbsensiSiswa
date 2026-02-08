@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
 
   const checkAuth = async () => {
       try {
-          const res = await axios.get('http://192.168.100.102:8004/auth/me');
+          const res = await api.get('/auth/me');
           setUser(res.data);
           localStorage.setItem("user_data", JSON.stringify(res.data));
       } catch (err) {
@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      await axios.post("http://192.168.100.102:8004/auth/logout");
+      await api.post("/auth/logout");
     } finally {
       setUser(null);
       localStorage.removeItem("user_data"); 

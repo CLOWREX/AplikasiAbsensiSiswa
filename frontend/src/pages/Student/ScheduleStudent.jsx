@@ -17,7 +17,7 @@ const SchedulePage = () => {
 
   const fetchSchedules = async () => {
     try {
-      const response = await axios.get("http://192.168.100.102:8004/schedule/");
+      const response = await api.get("/schedule/");
       const grouped = response.data.reduce((acc, curr) => {
         if (!acc[curr.day]) acc[curr.day] = [];
         acc[curr.day].push(curr);

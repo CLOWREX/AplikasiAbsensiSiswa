@@ -20,12 +20,8 @@ const RegisterTeacher = () => {
     e.preventDefault();
 
     try {
-      await axios.post(
-        "http://192.168.100.102:8004/auth/register/student/",
-        formData,
-        { withCredentials: true }
-      );
-
+      await api.post("/auth/register/student/", formData);
+      
       alert(`Student account ${formData.fullName} has been created successfully`);
       navigate("/home");
     } catch (err) {

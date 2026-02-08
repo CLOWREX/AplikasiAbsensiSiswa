@@ -27,7 +27,7 @@ const ManageData = () => {
 
   const fetchSchedules = async () => {
     try {
-      const response = await axios.get("http://192.168.100.102:8004/schedule/");
+      const response = await api.get("/schedule/");
       const grouped = response.data.reduce((acc, curr) => {
         if (!acc[curr.day]) acc[curr.day] = [];
         acc[curr.day].push(curr);
@@ -44,9 +44,9 @@ const ManageData = () => {
   const handleSubmit = async () => {
     try {
       if (editId) {
-        await axios.put(`http://192.168.100.102:8004/schedule/${editId}`, form);
+        await api.put(`/schedule/${editId}`, form);
       } else {
-        await axios.post("http://192.168.100.102:8004/schedule/", form);
+        await api.post("/schedule/", form);
       }
       setShowModal(false);
       setEditId(null);
@@ -66,7 +66,7 @@ const ManageData = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Hapus jadwal ini?")) return;
     try {
-      await axios.delete(`http://192.168.100.102:8004/schedule/${id}`);
+      await api.delete(`/schedule/${id}`);
       fetchSchedules();
     } catch (err) {
       console.error("Delete error:", err);

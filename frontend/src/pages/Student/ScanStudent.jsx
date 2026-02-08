@@ -13,9 +13,7 @@ const QRScannerModal = ({ onClose }) => {
 
   const checkAttendanceStatus = useCallback(async () => {
     try {
-      const response = await axios.get("http://192.168.100.102:8004/attendance/today-status", {
-        withCredentials: true 
-      });
+      const response = await api.get("/attendance/today-status");
       setIsAlreadyPresent(response.data.already_present);
     } catch (err) {
       console.error("Gagal cek status", err);
@@ -33,8 +31,8 @@ const QRScannerModal = ({ onClose }) => {
     if (scanned || !qrData || isAlreadyPresent) return;
 
     try {
-      const response = await axios.post("http://192.168.100.102:8004/attendance/scan", 
-        { qr_content: qrData },
+        const response = await api.post("/attendance/scan",
+          { qr_content: qrData },
         { withCredentials: true } 
       );
 

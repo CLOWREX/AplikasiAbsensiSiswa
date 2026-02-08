@@ -11,8 +11,7 @@ const PresenceTeacher = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const res = await axios.get('http://192.168.100.102:8004/teacher/classes-summary', { withCredentials: true });
-        
+        const res = await api.get('/teacher/classes-summary');        
         const dataWithStatus = res.data.map(c => ({
           ...c,
           status:

@@ -24,11 +24,7 @@ const ClassDetailsTeacher = () => {
 
   const confirmAlpha = async () => {
     try {
-      await axios.post(
-        `http://192.168.100.102:8004/teacher/alpha/${alphaModal.studentId}`,
-        {},
-        { withCredentials: true }
-      );
+      await api.post(`/teacher/alpha/${alphaModal.studentId}`, {});
 
       setData(prev => ({
         ...prev,
@@ -46,10 +42,7 @@ const ClassDetailsTeacher = () => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const res = await axios.get(
-          `http://192.168.100.102:8004/teacher/class-details/${className}`,
-          { withCredentials: true }
-        );
+        const res = await api.get(`/teacher/class-details/${className}`);
 
         const raw = res.data;
         const presentStudents = raw.present || [];

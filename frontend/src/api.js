@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://192.168.100.102:8004',
+  baseURL: 'https://aplikasiabsensisiswa-production.up.railway.app',
   withCredentials: true 
 });
 

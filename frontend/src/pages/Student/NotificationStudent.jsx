@@ -18,11 +18,11 @@ const NotificationStudent = () => {
 
   const fetchData = async () => {
     try {
-      const resNotif = await axios.get('http://192.168.100.102:8004/student/notifications', { withCredentials: true });
+      const resNotif = await api.get('/student/notifications');
       console.log("Data Notif:", resNotif.data);
       setNotifications(resNotif.data);
 
-      const resSum = await axios.get('http://192.168.100.102:8004/student/monthly-summary', { withCredentials: true });
+      const resSum = await api.get('/student/monthly-summary');
       console.log("Data Summary:", resSum.data);
       setSummary(resSum.data);
     } catch (err) {

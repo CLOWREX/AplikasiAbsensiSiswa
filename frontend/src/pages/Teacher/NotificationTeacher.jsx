@@ -17,7 +17,7 @@ const NotificationTeacher = () => {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get('http://192.168.100.102:8004/teacher/notifications', { withCredentials: true });
+      const res = await api.get('/teacher/notifications');
       setNotifications(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       if (err.response?.status === 401) {
@@ -31,7 +31,7 @@ const NotificationTeacher = () => {
 
   const fetchDailySummary = async () => {
     try {
-      const res = await axios.get('http://192.168.100.102:8004/teacher/daily-summary', { withCredentials: true });
+      const res = await api.get('/teacher/daily-summary');
       setDailySummary(res.data);
     } catch (err) {
       console.error(err);

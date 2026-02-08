@@ -32,9 +32,7 @@ const PresencePage = () => {
     };
 
     try {
-      await axios.post("http://192.168.100.102:8004/attendance/submit", attendanceData, {
-        withCredentials: true 
-      });
+      await api.post("/attendance/submit", attendanceData);
 
       await Swal.fire({
         icon: 'success',
