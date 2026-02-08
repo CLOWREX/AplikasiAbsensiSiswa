@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiArrowLeft, FiSearch } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import api from "../../api";
 
 const PresenceTeacher = () => {
   const [search, setSearch] = useState('');

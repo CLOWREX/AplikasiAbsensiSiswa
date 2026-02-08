@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiUser, FiArrowLeft, FiEdit2, FiTrash2, FiPlus, FiClock, FiMapPin } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import api from "../../api";
 
 const ManageData = () => {
   const navigate = useNavigate();

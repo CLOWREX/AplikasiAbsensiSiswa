@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://aplikasiabsensisiswa-production.up.railway.app',
+  baseURL: 'https://protective-peace-production-f6d5.up.railway.app',
   withCredentials: true 
 });
 

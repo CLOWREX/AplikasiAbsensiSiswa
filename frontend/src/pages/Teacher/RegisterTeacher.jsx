@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import api from "../../api";
 
 const RegisterTeacher = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const RegisterTeacher = () => {
 
     try {
       await api.post("/auth/register/student/", formData);
-      
+
       alert(`Student account ${formData.fullName} has been created successfully`);
       navigate("/home");
     } catch (err) {

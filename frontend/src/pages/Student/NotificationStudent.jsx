@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import api from "../../api";
 
 const NotificationStudent = () => {
   const navigate = useNavigate();

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios'; 
 import { FiX, FiInfo } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import api from "../../api";
 
 const QRCodeGenerator = () => {
   const [qrImageUrl, setQrImageUrl] = useState(null);

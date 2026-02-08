@@ -3,6 +3,7 @@ import { FiArrowLeft, FiSend } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import Swal from 'sweetalert2'; 
+import api from "../../api";
 
 const PresencePage = () => {
   const navigate = useNavigate();

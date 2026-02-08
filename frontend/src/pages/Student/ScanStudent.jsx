@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { FiClock, FiCheckCircle, FiX } from "react-icons/fi";
 import axios from "axios";
+import api from "../../api";
 
 const QRScannerModal = ({ onClose }) => {
   const navigate = useNavigate();

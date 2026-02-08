@@ -3,6 +3,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext'; 
+import api from "../../api";
 
 const NotificationTeacher = () => {
   const { user, loading } = useAuth();  

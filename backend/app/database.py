@@ -1,12 +1,22 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+import os
 
-DATABASE_URL = "sqlite:///./absensi.db"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_engine(
-    DATABASE_URL, 
-    connect_args={"check_same_thread": False}
-)
+if DATABASE_URL:
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+else:
+    DATABASE_URL = "sqlite:///./absensi.db"
+
+if "sqlite" in DATABASE_URL:
+    engine = create_engine(
+        DATABASE_URL, 
+        connect_args={"check_same_thread": False}
+    )
+else:
+    engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(
     autocommit=False,

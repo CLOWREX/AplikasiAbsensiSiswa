@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi"; 
 import axios from "axios"; 
 import "./register.css";
+import api from "../../api";
 
 const Register = () => {
   const [fullname, setFullname] = useState("");
