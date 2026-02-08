@@ -42,7 +42,7 @@ const HistoryStudent = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await axios.get("http://localhost:8001/attendance/history", {
+        const res = await axios.get("http://192.168.100.102:8004/attendance/history", {
           withCredentials: true
         });
         

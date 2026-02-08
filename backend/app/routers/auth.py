@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException, Response, Request, status
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app import models
-from app.utils.security import verify_password, hash_password
 from app.utils.jwt import create_access_token, decode_access_token
 from app.schemas.user import UserCreate
 from pydantic import BaseModel
@@ -28,7 +27,7 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     new_user = models.User(
         fullName=user_in.fullName,
         username=user_in.username,
-        password=hash_password(user_in.password),
+        password=user_in.password,
         phone=user_in.phone,
         student_class=user_in.student_class,
         role=user_in.role
@@ -45,7 +44,7 @@ def register_student(user_in: UserCreate, db: Session = Depends(get_db)):
     new_user = models.User(
         fullName=user_in.fullName,
         username=user_in.username,
-        password=hash_password(user_in.password),
+        password=user_in.password,
         phone=user_in.phone,
         student_class=user_in.student_class,
         role="student"
@@ -60,8 +59,8 @@ def login(data: LoginSchema, response: Response, db: Session = Depends(get_db)):
         models.User.username == data.username
     ).first()
 
-    if not user or not verify_password(data.password, user.password):
-        raise HTTPException(
+    if not user or data.password != user.password:
+     raise HTTPException(
             status_code=401,
             detail="Invalid username or password"
         )

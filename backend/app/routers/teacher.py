@@ -127,7 +127,8 @@ def alpha_student(student_id: int, db: Session = Depends(get_db)):
         date=today,
         status="alpha",
         time=datetime.now().strftime("%H:%M"),
-        explanation="Absent without permission"
+        explanation="",
+        time_status=""
     )
 
     db.add(alpha_attendance)
@@ -143,7 +144,6 @@ def teacher_notifications(db: Session = Depends(get_db)):
     today = date.today()
     start_date = today - timedelta(days=30)
 
-    # Ambil semua attendance & jumlah siswa per kelas dalam 30 hari sekaligus
     subq = (
         db.query(
             models.Attendance.date.label("att_date"),
@@ -160,7 +160,6 @@ def teacher_notifications(db: Session = Depends(get_db)):
         .all()
     )
 
-    # Ambil total siswa per kelas
     total_students_per_class = dict(
         db.query(
             models.User.student_class,
@@ -175,7 +174,6 @@ def teacher_notifications(db: Session = Depends(get_db)):
     for record in subq:
         total = total_students_per_class.get(record.cls_name, 0)
         if total > 0 and total == record.checked_in:
-            # Tentukan string waktu
             if record.att_date == today:
                 time_str = "Today"
             elif record.att_date == today - timedelta(days=1):

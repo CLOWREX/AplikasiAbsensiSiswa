@@ -17,7 +17,6 @@ class User(Base):
 
     attendances = relationship("Attendance", back_populates="user")
 
-
 class Attendance(Base):
     __tablename__ = "attendances"
 
@@ -36,7 +35,6 @@ class Attendance(Base):
         UniqueConstraint("user_id", "date", name="unique_user_date"),
     )
 
-
 class Schedule(Base):
     __tablename__ = "schedules"
 
@@ -46,7 +44,6 @@ class Schedule(Base):
     subject = Column(String)
     teacher = Column(String)
     room = Column(String)
-
 
 class QRCode(Base):
     __tablename__ = "qr_codes"

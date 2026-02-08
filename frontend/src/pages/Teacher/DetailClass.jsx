@@ -25,7 +25,7 @@ const ClassDetailsTeacher = () => {
   const confirmAlpha = async () => {
     try {
       await axios.post(
-        `http://localhost:8001/teacher/alpha/${alphaModal.studentId}`,
+        `http://192.168.100.102:8004/teacher/alpha/${alphaModal.studentId}`,
         {},
         { withCredentials: true }
       );
@@ -47,7 +47,7 @@ const ClassDetailsTeacher = () => {
     const fetchDetails = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8001/teacher/class-details/${className}`,
+          `http://192.168.100.102:8004/teacher/class-details/${className}`,
           { withCredentials: true }
         );
 

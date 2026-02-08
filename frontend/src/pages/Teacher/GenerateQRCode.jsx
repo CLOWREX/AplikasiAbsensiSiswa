@@ -15,14 +15,14 @@ const QRCodeGenerator = () => {
       setError("");
 
       const response = await axios.post(
-        "http://localhost:8001/qr/generate",
+        "http://192.168.100.102:8004/qr/generate",
         {},
         { withCredentials: true }
       );
 
       if (response.data?.qr_image_url) {
         const ts = Date.now();
-        setQrImageUrl(`http://localhost:8001${response.data.qr_image_url}?t=${ts}`);
+        setQrImageUrl(`http://192.168.100.102:8004${response.data.qr_image_url}?t=${ts}`);
       } else {
         setError("QR code not found.");
       }
@@ -84,7 +84,7 @@ const QRCodeGenerator = () => {
             Students must scan this QR code to mark today’s attendance.
           </p>
           <div className="bg-black/20 py-2 px-5 rounded-xl border border-white/20 font-bold inline-block">
-            📅 {new Date().toLocaleDateString('id-ID', {
+            📅 {new Date().toLocaleDateString('en-GB', {
               weekday: 'long',
               day: 'numeric',
               month: 'long',

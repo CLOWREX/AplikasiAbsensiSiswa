@@ -23,7 +23,7 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:8001/auth/register", {
+      const response = await axios.post("http://192.168.100.102:8004/auth/register", {
         fullName: fullname,
         username: username, 
         password: password,
@@ -49,7 +49,7 @@ const Register = () => {
           </h1>
           <div className="qr-box">
             <img
-              src="/src/assets/qr-scan.png" 
+              src="/qr-scan.png" 
               alt="QR Icon"
               className="qr-image"
               onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/241/241528.png" }}

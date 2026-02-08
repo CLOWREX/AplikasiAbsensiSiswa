@@ -21,7 +21,7 @@ const RegisterTeacher = () => {
 
     try {
       await axios.post(
-        "http://localhost:8001/auth/register/student/",
+        "http://192.168.100.102:8004/auth/register/student/",
         formData,
         { withCredentials: true }
       );

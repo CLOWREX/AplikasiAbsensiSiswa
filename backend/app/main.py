@@ -13,10 +13,11 @@ os.makedirs("static/qr_codes", exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = [
+    "http://192.168.100.102:5173",
+    "http://192.168.100.102:5004", 
+    "http://192.168.100.102:8004", 
+    "http://localhost",
     "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000"
 ]
 
 app.add_middleware(

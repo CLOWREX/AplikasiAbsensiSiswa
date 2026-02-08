@@ -25,7 +25,7 @@ const Hero = ({ fullName, onMenuOpen }) => {
 
         <button onClick={() => navigate('/scan')} className="group flex flex-col items-center gap-2 shrink-0"> 
           <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#5dbcd2] rounded-[1.5rem] flex items-center justify-center text-white shadow-lg active:scale-90 transition-all">
-            <img src="/src/assets/qr-scan.png" className="w-1/2 h-1/2 brightness-0 invert" alt="Scan" 
+            <img src="/qr-scan.png" className="w-1/2 h-1/2 brightness-0 invert" alt="Scan" 
                  onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/241/241528.png" }} />
           </div>
           <span className="text-[10px] sm:text-xs font-black text-[#5dbcd2] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Scan QR</span>

@@ -50,13 +50,14 @@ def scan_qr(
 
     try:
         payload = json.loads(data.qr_content)
+        if payload.get("type") != "attendance":
+            raise HTTPException(status_code=400, detail="Invalid QR type")
     except:
         raise HTTPException(status_code=400, detail="Invalid QR format")
 
-    if payload.get("type") != "attendance":
-        raise HTTPException(status_code=400, detail="Invalid QR type")
-
     today = date.today()
+    scan_time = datetime.now()
+    official_time = scan_time.replace(hour=6, minute=30, second=0, microsecond=0)
 
     existing = db.query(models.Attendance).filter(
         models.Attendance.user_id == current_user.id,
@@ -64,34 +65,27 @@ def scan_qr(
     ).first()
 
     if existing:
-        official_time = datetime.combine(today, datetime.strptime("06:30", "%H:%M").time())
-        actual_time = datetime.strptime(existing.time, "%H:%M:%S")
-        late_minutes = max(0, int((actual_time - official_time).total_seconds() // 60))
-        time_status = "On Time" if late_minutes == 0 else "Late"
-
+        actual_time_dt = datetime.combine(today, datetime.strptime(existing.time, "%H:%M:%S").time())
+        late_mins = max(0, int((actual_time_dt - official_time).total_seconds() // 60))
+        
         return {
             "success": True,
-            "message": "You have already checked in today.",
+            "message": "Sudah absen hari ini",
             "time": existing.time,
-            "time_status": time_status,
-            "late_minutes": late_minutes
+            "status": existing.status,
+            "time_status": existing.time_status, 
+            "late_minutes": late_mins 
         }
 
-    scan_time = datetime.now()
-    official_time = scan_time.replace(hour=6, minute=30, second=0, microsecond=0)
-
-    if scan_time <= official_time:
-        time_status = "On Time"
-        late_minutes = 0
-    else:
-        time_status = "Late"
-        late_minutes = int((scan_time - official_time).total_seconds() // 60)
+    late_minutes = max(0, int((scan_time - official_time).total_seconds() // 60))
+    time_status_val = "Late" if late_minutes > 0 else "On Time"
         
     attendance = models.Attendance(
         user_id=current_user.id,
         date=today,
         time=scan_time.strftime("%H:%M:%S"),
-        status="present"
+        status="Present", 
+        time_status=time_status_val
     )
 
     db.add(attendance)
@@ -100,8 +94,9 @@ def scan_qr(
     return {
         "success": True,
         "message": "Attendance recorded successfully.",
-        "time": scan_time.strftime("%H:%M:%S"),
-        "time_status": time_status,
+        "time": attendance.time,
+        "status": "Present", 
+        "time_status": time_status_val,
         "late_minutes": late_minutes
     }
 

@@ -32,7 +32,7 @@ const PresencePage = () => {
     };
 
     try {
-      await axios.post("http://localhost:8001/attendance/submit", attendanceData, {
+      await axios.post("http://192.168.100.102:8004/attendance/submit", attendanceData, {
         withCredentials: true 
       });
 

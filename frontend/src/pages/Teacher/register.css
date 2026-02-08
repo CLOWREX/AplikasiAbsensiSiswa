@@ -200,7 +200,7 @@ input, button, label, textarea {
 @media (max-width: 992px) {
   .register-container {
     flex-direction: column;
-    height: 95vh;
+    height: auto;
     overflow-y: auto; 
   }
   

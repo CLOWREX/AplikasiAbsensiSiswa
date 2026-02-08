@@ -4,6 +4,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios"; 
 import "./login.css";
+import api from "../../api";
 
 const Login = () => {
   const [idNumber, setIdNumber] = useState("");
@@ -28,11 +29,7 @@ const Login = () => {
         password: password,
       };
 
-      const response = await axios.post(
-        "http://localhost:8001/auth/login",
-        payload,
-        { withCredentials: true }
-      );
+      const response = await api.post("/auth/login", payload);
 
       if (response.status === 200) {
           login(response.data);
@@ -57,7 +54,7 @@ const Login = () => {
           </h1>
           <div className="qr-box">
             <img
-              src="/src/assets/qr-scan.png" 
+              src="/qr-scan.png" 
               alt="QR Icon"
               className="qr-image"
               onError={(e) => { e.target.src = "https://cdn-icons-png.flaticon.com/512/241/241528.png" }}

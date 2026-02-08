@@ -18,11 +18,11 @@ const NotificationStudent = () => {
 
   const fetchData = async () => {
     try {
-      const resNotif = await axios.get('http://localhost:8001/student/notifications', { withCredentials: true });
+      const resNotif = await axios.get('http://192.168.100.102:8004/student/notifications', { withCredentials: true });
       console.log("Data Notif:", resNotif.data);
       setNotifications(resNotif.data);
 
-      const resSum = await axios.get('http://localhost:8001/student/monthly-summary', { withCredentials: true });
+      const resSum = await axios.get('http://192.168.100.102:8004/student/monthly-summary', { withCredentials: true });
       console.log("Data Summary:", resSum.data);
       setSummary(resSum.data);
     } catch (err) {
@@ -40,7 +40,6 @@ const NotificationStudent = () => {
       </div>
 
       <main className="max-w-6xl mx-auto p-8 flex flex-col md:flex-row gap-8 items-start">
-        {/* NOTIFICATIONS LIST */}
         <div className="flex-1 w-full">
           <h2 className="text-lg font-bold text-gray-700 mb-6">Recent Updates</h2>
           <div className="space-y-4">
@@ -68,7 +67,6 @@ const NotificationStudent = () => {
           </div>
         </div>
 
-        {/* ATTENDANCE SUMMARY SIDEBAR */}
         <aside className="w-full md:w-80 md:sticky md:top-8">
           <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100">
             <h2 className="text-lg font-bold text-gray-700 mb-6">Monthly Attendance</h2>
