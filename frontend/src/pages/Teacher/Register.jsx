@@ -6,7 +6,7 @@ import "./register.css";
 import api from "../../api";
 
 const Register = () => {
-  const [fullname, setFullname] = useState("");
+  const [fullname, setfullname] = useState("");
   const [username, setUsername] = useState(""); 
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +25,7 @@ const Register = () => {
 
     try {
       const response = await api.post("/auth/register", {
-        fullName: fullname,
+        fullname: fullname,
         username: username, 
         password: password,
         phone: phone,
@@ -81,7 +81,7 @@ const Register = () => {
                 type="text"
                 placeholder="Enter your full name"
                 value={fullname}
-                onChange={(e) => { setFullname(e.target.value); setError(""); }}
+                onChange={(e) => { setfullname(e.target.value); setError(""); }}
               />
             </div>
 

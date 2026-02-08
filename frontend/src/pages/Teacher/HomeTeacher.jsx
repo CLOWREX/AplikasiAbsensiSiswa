@@ -18,7 +18,7 @@ const FeaturesGrid = ({ features }) => (
   </section>
 );
 
-const Hero = ({ fullName, onMenuOpen }) => {
+const Hero = ({ fullname, onMenuOpen }) => {
   const navigate = useNavigate();
 
   return (
@@ -33,7 +33,7 @@ const Hero = ({ fullName, onMenuOpen }) => {
           </div>
 
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5dbcd2] tracking-tight">
-            Hi {fullName ? fullName : "…"}!
+            Hi {fullname ? fullname : "…"}!
           </h2>
 
           <p className="text-[#899ca9] text-sm sm:text-lg font-bold mt-2">
@@ -121,7 +121,7 @@ export default function Home() {
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 overflow-y-auto h-screen scrollbar-hide">
         <Hero 
-          fullName={user?.fullName} 
+          fullname={user?.fullname} 
           onMenuOpen={() => setIsSidebarOpen(true)} 
         />
         <WelcomeBanner />

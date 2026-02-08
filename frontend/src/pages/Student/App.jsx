@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { FiMenu, FiGrid } from 'react-icons/fi';
 
-const Hero = ({ fullName, onMenuOpen }) => {
+const Hero = ({ fullname, onMenuOpen }) => {
   const navigate = useNavigate();
   return (
     <section className="pt-8 md:pt-12 mb-8">
@@ -16,7 +16,7 @@ const Hero = ({ fullName, onMenuOpen }) => {
              <span className="text-[#5dbcd2] font-black">Menu</span>
           </div>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#5dbcd2] tracking-tight">
-            Hi {fullName ? fullName : "…"}!
+            Hi {fullname ? fullname : "…"}!
           </h2>
           <p className="text-[#899ca9] text-sm sm:text-lg font-bold mt-2">
             Good Morning, hope you have a great day.
@@ -92,7 +92,7 @@ const Home = ({ onMenuOpen }) => {
 
   return (
     <div className="flex-1 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 overflow-y-auto h-screen scrollbar-hide bg-[#D6EBEE]">
-      <Hero fullName={user?.fullName} onMenuOpen={onMenuOpen} />
+      <Hero fullname={user?.fullname} onMenuOpen={onMenuOpen} />
       
       <WelcomeBanner />
       

@@ -8,7 +8,7 @@ const RegisterTeacher = () => {
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
-    fullName: "",
+    fullname: "",
     username: "",
     password: "",
     phone: "",
@@ -23,7 +23,7 @@ const RegisterTeacher = () => {
     try {
       await api.post("/auth/register/student/", formData);
 
-      alert(`Student account ${formData.fullName} has been created successfully`);
+      alert(`Student account ${formData.fullname} has been created successfully`);
       navigate("/home");
     } catch (err) {
       alert(err.response?.data?.detail || "Registration failed");
@@ -56,8 +56,8 @@ const RegisterTeacher = () => {
                 required
                 type="text" 
                 placeholder="Full Name" 
-                value={formData.fullName}
-                onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                value={formData.fullname}
+                onChange={(e) => setFormData({...formData, fullname: e.target.value})}
                 className="w-full !mb-[20px] bg-white border-2 border-gray-100 rounded-2xl px-6 py-4 outline-none focus:border-[#5dbcd2] font-bold text-gray-600 placeholder:text-blue-200 shadow-sm transition-all"
               />
               

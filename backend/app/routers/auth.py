@@ -25,7 +25,7 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
         )
 
     new_user = models.User(
-        fullName=user_in.fullName,
+        fullname=user_in.fullname,
         username=user_in.username,
         password=user_in.password,
         phone=user_in.phone,
@@ -42,7 +42,7 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
 @auth_router.post("/register/student", status_code=201)
 def register_student(user_in: UserCreate, db: Session = Depends(get_db)):
     new_user = models.User(
-        fullName=user_in.fullName,
+        fullname=user_in.fullname,
         username=user_in.username,
         password=user_in.password,
         phone=user_in.phone,
@@ -84,7 +84,7 @@ def login(data: LoginSchema, response: Response, db: Session = Depends(get_db)):
         "message": "Login successful",
         "access_token": token,
         "role": user.role,
-        "fullName": user.fullName,
+        "fullname": user.fullname,
         "username": user.username, 
         "phone": user.phone,
         "student_class": user.student_class
@@ -114,7 +114,7 @@ def get_me(request: Request, db: Session = Depends(get_db)):
     return {
         "id": user.id,
         "username": user.username,
-        "fullName": user.fullName,
+        "fullname": user.fullname,
         "role": user.role,
         "phone": user.phone,
         "student_class": user.student_class

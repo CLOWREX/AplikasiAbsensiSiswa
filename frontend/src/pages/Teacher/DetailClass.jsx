@@ -62,7 +62,7 @@ const ClassDetailsTeacher = () => {
           missing: missingStudents.length,
           missingStudents: missingStudents.map(s => ({
             id: s.id,
-            name: s.fullName,
+            name: s.fullname,
             username: s.username
           })),
           leave: [...sickStudents, ...permissionStudents]
@@ -213,7 +213,7 @@ const ClassDetailsTeacher = () => {
                   </div>
                   <div style={{ flexGrow: 1 }}>
                     <p style={{ margin: 0, fontSize: '0.9rem', fontWeight: 700, color: '#334155' }}>
-                      {l.user?.fullName}
+                      {l.user?.fullname}
                     </p>
 
                     <div style={{ display: 'flex', gap: '6px', marginTop: '4px' }}>

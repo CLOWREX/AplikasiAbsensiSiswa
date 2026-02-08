@@ -54,7 +54,7 @@ try:
         teacher = models.User(
             username="111111111111111111",
             password=fast_hash("teacher123"),
-            fullName="Mr. Budi Santoso",
+            fullname="Mr. Budi Santoso",
             role="teacher",
             phone="085719991893",
             student_class=None
@@ -105,7 +105,7 @@ try:
         db.add(models.User(
             username=s["username"],
             password=fast_hash("student123"),
-            fullName=s["name"],
+            fullname=s["name"],
             role="student",
             student_class=s["student_class"],
             phone=f"0851{s['username']}"

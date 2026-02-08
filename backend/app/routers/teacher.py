@@ -78,7 +78,7 @@ def get_class_details(class_name: str, db: Session = Depends(get_db)):
             "time": a.time,
             "user": {
                 "id": a.user.id,
-                "fullName": a.user.fullName,
+                "fullname": a.user.fullname,
                 "username": a.user.username 
             }
         })
@@ -89,7 +89,7 @@ def get_class_details(class_name: str, db: Session = Depends(get_db)):
         if s.id not in present_user_ids:
             missing_students.append({
                 "id": s.id,
-                "fullName": s.fullName,
+                "fullname": s.fullname,
                 "username": s.username 
             })
 

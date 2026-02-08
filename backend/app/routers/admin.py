@@ -16,7 +16,7 @@ def dashboard(
     qr_count = db.query(models.QrCode).filter(models.QrCode.created_by == teacher.id).count()
 
     return {
-        "message": f"Selamat datang, {teacher.fullName}",
+        "message": f"Selamat datang, {teacher.fullname}",
         "stats": {
             "username": teacher.username,
             "role": teacher.role,

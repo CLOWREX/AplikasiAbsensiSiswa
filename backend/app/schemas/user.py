@@ -4,7 +4,7 @@ from typing import Optional
 class UserCreate(BaseModel):
     username: str 
     password: str
-    fullName: str
+    fullname: str
     role: str 
     student_class: Optional[str] = None 
     phone: Optional[str] = None
@@ -12,7 +12,7 @@ class UserCreate(BaseModel):
 class UserResponse(BaseModel):
     id: int
     username: str 
-    fullName: str
+    fullname: str
     role: str
     student_class: Optional[str] = None
     phone: Optional[str] = None

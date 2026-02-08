@@ -10,7 +10,7 @@ const ProfileStudent = () => {
   const profileData = [
     { 
       label: 'Name', 
-      value: user?.fullName || 'Not Set', 
+      value: user?.fullname || 'Not Set', 
       icon: <FiUser /> 
     },
     { 
