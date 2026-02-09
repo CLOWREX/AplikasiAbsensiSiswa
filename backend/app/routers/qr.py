@@ -62,5 +62,6 @@ def generate_qr(
     db.refresh(qr_record)
 
     return {
+        "status": "success",
         "qr_image_url": qr_record.file_path
     }

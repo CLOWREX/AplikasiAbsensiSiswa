@@ -75,8 +75,8 @@ def login(data: LoginSchema, response: Response, db: Session = Depends(get_db)):
         value=token,
         httponly=True,
         max_age=86400,
-        samesite="none",   
-        secure=True,    
+        samesite="lax",  
+        secure=False,     
         path="/"
     )
 

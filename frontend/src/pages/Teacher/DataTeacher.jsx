@@ -174,7 +174,7 @@ const ManageData = () => {
                     value={form[f]}
                     onChange={e => setForm({ ...form, [f]: e.target.value })}
                     placeholder={`Enter ${f}...`}
-                    className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5DBDD2]/50 focus:bg-white transition-all text-gray-700"
+                    className="w-full bg-gray-50 border border-gray-200 !px-[10px] !py-[3px] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5DBDD2]/50 focus:bg-white transition-all text-gray-700"
                   />
                 </div>
               ))}
@@ -189,7 +189,7 @@ const ManageData = () => {
               </button>
               <button 
                 onClick={handleSubmit} 
-                className="bg-[#5DBDD2] text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-[#5DBDD2]/30 active:scale-95 transition-all"
+                className="bg-[#5DBDD2] text-white !px-[15px] !py-[3px] rounded-xl font-bold shadow-lg shadow-[#5DBDD2]/30 active:scale-95 transition-all"
               >
                 Save Data
               </button>

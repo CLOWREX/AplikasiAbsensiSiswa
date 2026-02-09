@@ -23,9 +23,6 @@ import { useAuth } from "./context/AuthContext";
 import "./index.css";
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://aplikasiabsensisiswa-production.up.railway.app';
-axios.defaults.withCredentials = true;
-
 export default function App() {
   const { user, loading } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

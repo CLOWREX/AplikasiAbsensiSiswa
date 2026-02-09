@@ -1,9 +1,9 @@
 from app.database import SessionLocal, engine, Base
 from app import models
-from datetime import datetime, date
+from datetime import date, timedelta
 import random
 
-MODE = "users_only"  
+MODE = "full"  
 STUDENTS_TOTAL = 757
 START_NIS = 13001
 
@@ -25,83 +25,58 @@ FOREIGN_LAST = ["Doe","Smith","Brown","Davis","Johnson","Martinez","Wilson","And
                 "Moore","Jackson","White","Harris","Martin","Thompson","Garcia","Clark","Lewis","Robinson"]
 
 def generate_name_pool():
-    pool = []
-    for f in INDO_FIRST:
-        for l in INDO_LAST:
-            pool.append(f"{f} {l}")
-    for f in FOREIGN_FIRST:
-        for l in FOREIGN_LAST:
-            pool.append(f"{f} {l}")
+    pool = [f"{f} {l}" for f in INDO_FIRST for l in INDO_LAST]
+    pool += [f"{f} {l}" for f in FOREIGN_FIRST for l in FOREIGN_LAST]
     random.shuffle(pool)
     return pool
 
 def fast_hash(password: str):
-    from passlib.context import CryptContext
-    pwd_context = CryptContext(schemes=["bcrypt"], bcrypt__rounds=4) 
-    return pwd_context.hash(password)
+    return password  
 
 try:
     print(f"🚀 Running seed in mode: {MODE}")
-    today_date = date.today()
-
+    
     if MODE == "full":
         Base.metadata.drop_all(bind=engine)
         Base.metadata.create_all(bind=engine)
-        print("✅ Database reset complete.")
+        print("✅ Database reset & tables created.")
 
-    teacher = db.query(models.User).filter(models.User.username == "111111111111111111").first()
-    if not teacher:
-        teacher = models.User(
-            username="111111111111111111",
-            password=fast_hash("teacher123"),
-            fullname="Mr. Budi Santoso",
-            role="teacher",
-            phone="085719991893",
-            student_class=None
-        )
-        db.add(teacher)
-        db.flush()
+    qr_files = ["qr_2026-01-31.png", "qr_2026-02-01.png", "qr_13001.png", "qr_13002.png"]
+    for f in qr_files:
+        db.add(models.QRCode(file_path=f"{f}", created_at=date.today()))
 
-    db.query(models.User).filter(models.User.role=="student").delete(synchronize_session=False)
-    db.commit()
+    teacher = models.User(
+        username="111111111111111111",
+        password=fast_hash("teacher123"),
+        fullname="Mr. Budi Santoso",
+        role="teacher",
+        phone="085719991893"
+    )
+    db.add(teacher)
+    db.flush()
 
     nis_counter = START_NIS
-    students = []
-    used_names = set(["Bella Angeline Revanya"])
-
-    students.append({
-        "username": "13096",
-        "name": "Bella Angeline Revanya",
-        "phone": "085156775762",
-        "student_class": "XI RPL"
-    })
-
+    students_data = [{"username": "13096", "name": "Bella Angeline Revanya", "student_class": "XI RPL"}]
+    used_names = {"Bella Angeline Revanya"}
     name_pool = generate_name_pool()
 
     for _ in range(STUDENTS_TOTAL - 1):
-        if nis_counter == 13096:
-            nis_counter += 1
+        if nis_counter == 13096: nis_counter += 1
         while True:
-            if not name_pool:
-                f = random.choice(INDO_FIRST + FOREIGN_FIRST)
-                l = random.choice(INDO_LAST + FOREIGN_LAST)
-                full_name = f"{f} {l}"
-            else:
-                full_name = name_pool.pop()
+            full_name = name_pool.pop() if name_pool else f"{random.choice(INDO_FIRST)} {random.choice(FOREIGN_LAST)}"
             if full_name not in used_names:
                 used_names.add(full_name)
                 break
-
         year = random.choice(["X","XI","XII"])
         major = random.choice(["BD","BR","AKL1","AKL2","MP","ML","RPL"])
-        students.append({
+        students_data.append({
             "username": str(nis_counter),
             "name": full_name,
             "student_class": f"{year} {major}"
         })
         nis_counter += 1
 
-    for s in students:
+    for s in students_data:
         db.add(models.User(
             username=s["username"],
             password=fast_hash("student123"),
@@ -111,78 +86,88 @@ try:
             phone=f"0851{s['username']}"
         ))
     db.commit()
+    print(f"✅ {len(students_data)} Students created.")
 
-    attendance_data = []
+    print("⏳ Generating attendance for the last 7 days...")
+    sick_reasons = ["Demam tinggi", "Flu dan batuk", "Sakit perut", "Pusing/Migrain", "Diare"]
+    permit_reasons = ["Acara keluarga", "Urusan mendadak", "Menengok saudara", "Kepentingan pribadi"]
+    db_students = db.query(models.User).filter(models.User.role == "student").all()
 
-    for s in students:
-        status_choice = random.choices(
-            ["Present On time", "Present Late", "Sick", "Permission", "Missing"],
-            weights=[0.5, 0.2, 0.1, 0.1, 0.1],  
-            k=1
-        )[0]
-
-        if status_choice != "Missing":
-            time = f"{random.randint(6,7):02d}:{random.randint(0,59):02d}" 
-            desc = "On time" if status_choice == "Present On time" else "Late"
-            attendance_data.append({
-                "username": s["username"],
-                "status": status_choice.split()[0],  
-                "time": time,
-                "desc": desc
-            })
-
-    for a in attendance_data:
-        user = db.query(models.User).filter(models.User.username==a["username"]).first()
-        if user:
-            db.add(models.Attendance(
-                user_id=user.id,
-                status=a["status"],
-                explanation=a.get("desc","On time"),
-                date=today_date,
-                time=a["time"]
+    for day_offset in range(7):
+        current_date = date.today() - timedelta(days=day_offset)
+        if current_date.strftime('%A') == 'Sunday':
+            continue
+        attendance_entries = []
+        for student in db_students:
+            status_choice = random.choices(
+                ["Present On time", "Present Late", "Sick", "Permission", "Alpha"],
+                weights=[0.6, 0.15, 0.05, 0.05, 0.15], k=1
+            )[0]
+            time_str = f"{random.randint(6,7):02d}:{random.randint(0,59):02d}" if "Present" in status_choice else ""
+            if "Present" in status_choice:
+                expl = ""
+                desc = "On time" if "On time" in status_choice else "Late"
+                status_db = "Present"
+            elif status_choice == "Sick":
+                expl = random.choice(sick_reasons)
+                desc = "Sick"
+                status_db = "Sick"
+            elif status_choice == "Permission":
+                expl = random.choice(permit_reasons)
+                desc = "Permission"
+                status_db = "Permission"
+            else:
+                expl = "Absent without permission"
+                desc = "Alpha"
+                status_db = "Absent"
+            attendance_entries.append(models.Attendance(
+                user_id=student.id,
+                status=status_db,
+                explanation=expl,
+                date=current_date,
+                time=time_str,
+                time_status=desc
             ))
-
-    db.query(models.Schedule).delete()
-    db.commit()
+        db.bulk_save_objects(attendance_entries)
+        db.commit()
+        print(f"   📅 Date {current_date} processed.")
 
     schedules = [
         {"day":"Monday","time":"06:30 - 07:15","subject":"Upacara","teacher":"Sekolah","room":"Lapangan"},
-        {"day":"Monday","time":"07:15 - 09:30","subject":"Pendidikan Agama","teacher":"Nurul Asfiyah, S.Pd / Tiomsi Sitorus, S.Th","room":"Ruang Teori"},
+        {"day":"Monday","time":"07:15 - 09:30","subject":"Pendidikan Agama","teacher":"Nurul Asfiyah, S.Pd / Tiomsi Sitorus, S.Th","room":"Ruang Teori 1"},
         {"day":"Monday","time":"09:50 - 11:20","subject":"PJOK","teacher":"Mujahid Robbani Salahuddin, S.Pd","room":"Lapangan"},
-        {"day":"Monday","time":"11:20 - 13:30","subject":"Sejarah","teacher":"Siti Sarifah, S.Pd","room":"Ruang Teori"},
-        {"day":"Monday","time":"13:30 - 15:00","subject":"Mapel Pilihan","teacher":"Faris Naufal, S.Pd","room":"Ruang Teori"},
+        {"day":"Monday","time":"11:20 - 13:30","subject":"Sejarah","teacher":"Siti Sarifah, S.Pd","room":"Ruang Teori 1"},
+        {"day":"Monday","time":"13:30 - 15:00","subject":"Mapel Pilihan","teacher":"Faris Naufal, S.Pd","room":"Ruang Teori 1"},
 
         {"day":"Tuesday","time":"06:30 - 10:35","subject":"Konsentrasi Keahlian (KK)","teacher":"Mujahid Robbani Salahuddin, S.Pd","room":"Lab RPL"},
-        {"day":"Tuesday","time":"10:35 - 12:05","subject":"Mapel Pilihan","teacher":"Faris Naufal, S.Pd","room":"Ruang Teori"},
-        {"day":"Tuesday","time":"12:45 - 15:00","subject":"PKK","teacher":"Faris Naufal, S.Pd","room":"Ruang Teori"},
+        {"day":"Tuesday","time":"10:35 - 12:05","subject":"Mapel Pilihan","teacher":"Faris Naufal, S.Pd","room":"Ruang Teori 1"},
+        {"day":"Tuesday","time":"12:45 - 15:00","subject":"PKK","teacher":"Faris Naufal, S.Pd","room":"Ruang Teori 1"},
 
-        {"day":"Wednesday","time":"06:30 - 07:15","subject":"BK","teacher":"Muh. Nurrahman, S.Kom","room":"Ruang Teori"},
-        {"day":"Wednesday","time":"07:15 - 08:00","subject":"Bahasa Jepang","teacher":"Wuryaningrum, S.Pd","room":"Ruang Teori"},
-        {"day":"Wednesday","time":"08:00 - 09:30","subject":"Bahasa Inggris","teacher":"Mega Rahmawati, S.Pd","room":"Ruang Teori"},
+        {"day":"Wednesday","time":"06:30 - 07:15","subject":"BK","teacher":"Muh. Nurrahman, S.Kom","room":"Ruang Teori 1"},
+        {"day":"Wednesday","time":"07:15 - 08:00","subject":"Bahasa Jepang","teacher":"Wuryaningrum, S.Pd","room":"Ruang Teori 1"},
+        {"day":"Wednesday","time":"08:00 - 09:30","subject":"Bahasa Inggris","teacher":"Mega Rahmawati, S.Pd","room":"Ruang Teori 1"},
         {"day":"Wednesday","time":"09:50 - 15:00","subject":"Konsentrasi Keahlian (KK)","teacher":"Mujahid Robbani Salahuddin, S.Pd","room":"Lab RPL"},
 
-        {"day":"Thursday","time":"06:30 - 08:45","subject":"Matematika","teacher":"Sarwadi, S.Pd","room":"Ruang Teori"},
+        {"day":"Thursday","time":"06:30 - 08:45","subject":"Matematika","teacher":"Sarwadi, S.Pd","room":"Ruang Teori 1"},
         {"day":"Thursday","time":"08:45 - 12:05","subject":"Konsentrasi Keahlian (KK)","teacher":"Muh. Nurrohman, S.Kom","room":"Lab RPL"},
         {"day":"Thursday","time":"12:45 - 15:00","subject":"Konsentrasi Keahlian (KK)","teacher":"Mujahid Robbani Salahuddin, S.Pd","room":"Lab RPL"},
 
         {"day":"Friday","time":"06:30 - 07:15","subject":"Kegiatan Rutin Jumat","teacher":"Sekolah","room":"Lapangan"},
-        {"day":"Friday","time":"07:15 - 08:35","subject":"Bahasa Inggris","teacher":"Mega Rahmawati, S.Pd","room":"Ruang Teori"},
-        {"day":"Friday","time":"08:35 - 09:55","subject":"PKK","teacher":"Faris Naufal, S.Pd","room":"Ruang Teori"},
-        {"day":"Friday","time":"10:15 - 13:40","subject":"Bahasa Indonesia","teacher":"Sudewo Pranowo, M.Pd","room":"Ruang Teori"},
-        {"day":"Friday","time":"13:40 - 15:00","subject":"PP","teacher":"Habibah, S.Pd","room":"Ruang Teori"},
+        {"day":"Friday","time":"07:15 - 08:35","subject":"Bahasa Inggris","teacher":"Mega Rahmawati, S.Pd","room":"Ruang Teori 1"},
+        {"day":"Friday","time":"08:35 - 09:55","subject":"PKK","teacher":"Faris Naufal, S.Pd","room":"Ruang Teori 1"},
+        {"day":"Friday","time":"10:15 - 13:40","subject":"Bahasa Indonesia","teacher":"Sudewo Pranowo, M.Pd","room":"Ruang Teori 1"},
+        {"day":"Friday","time":"13:40 - 15:00","subject":"PP","teacher":"Habibah, S.Pd","room":"Ruang Teori 1"},
     ]
-
+    
     for sch in schedules:
         db.add(models.Schedule(**sch))
-
     db.commit()
-    print("✅ Seeding complete (users + merged schedule).")
 
-    print(f"✅ Seeding complete. Total students: {len(students)}")
-    print("✅ Attendance now includes On time, Late, Sick, Permission, Missing.")
+    print(f"\n🔥 SEEDING COMPLETED SUCCESSFULLY!")
+    print(f"Total Records: {db.query(models.Attendance).count()} attendance entries.")
 
 except Exception as e:
-    print(f"❌ Error during seeding: {e}")
+    print(f"❌ Error: {e}")
     db.rollback()
 finally:
     db.close()

@@ -19,7 +19,7 @@ const QRCodeGenerator = () => {
 
       if (response.data?.qr_image_url) {
         const ts = new Date().getTime();
-        setQrImageUrl(`https://aplikasiabsensisiswa-production.up.railway.app${response.data.qr_image_url}?t=${ts}`);
+        setQrImageUrl(`http://192.168.100.102:8004${response.data.qr_image_url}?t=${ts}`);
       } else {
         setError("QR code not found.");
       }
