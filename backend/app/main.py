@@ -25,7 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
 app.include_router(auth.auth_router)
 app.include_router(teacher.teacher_router)
