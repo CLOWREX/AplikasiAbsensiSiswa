@@ -19,7 +19,7 @@ const QRCodeGenerator = () => {
 
       if (response.data?.qr_image_url) {
         const ts = new Date().getTime();
-        setQrImageUrl(`http://192.168.100.102:8004${response.data.qr_image_url}?t=${ts}`);
+        setQrImageUrl(`http://10.10.18.236:8004${response.data.qr_image_url}?t=${ts}`);
       } else {
         setError("QR code not found.");
       }
