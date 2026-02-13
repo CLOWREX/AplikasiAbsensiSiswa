@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5004:5000"  # backend diakses lewat port 5004
+    container_name: backend_kel4
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8004:80"    # frontend diakses lewat port 8004
+    container_name: frontend_kel4

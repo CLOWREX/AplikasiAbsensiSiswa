@@ -24,3 +24,8 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# 🔥 TAMBAHKAN INI DI BAWAH
+def init_db():
+    from app.models import Base as ModelsBase
+    ModelsBase.metadata.create_all(bind=engine)
